@@ -8,6 +8,16 @@
     <meta property="og:title" content="MarocoGO" />
     <meta property="og:description" content="Le Maroc, à votre rythme." />
     <title>MarocoGO — Le Maroc, à votre rythme</title>
+    <script>
+      // Restore the client route redirected by public/404.html on GitHub Pages.
+      (() => {
+        const { search, pathname, hash } = window.location;
+        if (search.startsWith('?/')) {
+          const route = search.slice(1).split('&').map((part) => part.replace(/~and~/g, '&')).join('?');
+          window.history.replaceState(null, '', `${pathname.slice(0, -1)}${route}${hash}`);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

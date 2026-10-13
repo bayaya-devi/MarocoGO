@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>MarocoGO</title>
+    <script>
+      (() => {
+        const location = window.location;
+        const repositoryPathSegments = 1;
+        const base = location.pathname.split('/').slice(0, repositoryPathSegments + 1).join('/');
+        const route = location.pathname.split('/').slice(repositoryPathSegments + 1).join('/').replace(/&/g, '~and~');
+        const query = location.search ? `&${location.search.slice(1).replace(/&/g, '~and~')}` : '';
+        location.replace(`${location.protocol}//${location.host}${base}/?/${route}${query}${location.hash}`);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
