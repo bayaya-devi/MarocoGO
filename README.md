@@ -1,46 +1,36 @@
-# MarocoGO Frontend V1
+# MarocoGO
 
-Frontend complet de démonstration pour MarocoGO : expérience Voyageur française + espace Prestataire français + constitution frontend.
+Portail national marocain de l’écosystème VoyageGo. Cette version transforme le prototype initial en une expérience frontend premium, multilingue et installable, tout en restant honnête sur les services externes qui ne sont pas encore connectés.
 
-## Installation
-```bash
-npm install
-```
+## Fonctionnalités opérationnelles
+
+- Accueil éditorial avec carrousel accessible, pause et préférences facultatives.
+- Navigation supérieure unique, compacte et rétractable.
+- Cinq langues : français, arabe RTL, anglais, espagnol et portugais.
+- Explorer avec carte Leaflet/OpenStreetMap réelle, recherche locale et géolocalisation sur demande.
+- Préparation guidée en sept étapes et mode libre utilisant le même modèle de voyage.
+- Carnet sauvegardé localement, vues simple/détaillée, réorganisation sans glisser-déposer et export PDF.
+- Favoris et ajout de lieux au voyage.
+- Service worker et reprise hors connexion de l’application et du carnet déjà chargé.
+- Interface prestataire responsive clairement identifiée comme non connectée.
+- Pages légales avec champs institutionnels restant à compléter.
+
+## Fonctions préparées, non connectées
+
+Les comptes VoyageGo, réservations, paiements, offres partenaires, taux de change, itinéraires routiers, notifications serveur, synchronisation multi-appareils et liens privés exigent des services backend validés. L’interface ne simule aucune confirmation réelle.
 
 ## Développement
+
 ```bash
+npm ci
 npm run dev
-```
-
-## Build
-```bash
+npm test
 npm run build
+npm run test:e2e
 ```
 
-## Preview
-```bash
-npm run preview
-```
+Le projet utilise React, TypeScript, Vite, React Router, Leaflet, jsPDF, Vitest, Playwright et axe-core. GitHub Pages publie le contenu de `dist` sous `/MarocoGO/` via `.github/workflows/deploy.yml`.
 
-## Architecture
-- `docs/FRONTEND-CONSTITUTION.md` : règles UX/UI officielles.
-- `public/logo/` : logo complet et symbole officiels fournis.
-- `src/data/` : données de démonstration séparées de l'UI.
-- `src/components/` : composants partagés.
-- `src/App.tsx` : routes et écrans V1.
-- `src/styles/global.css` : design tokens, Liquid Glass, responsive et animations.
+## Données et confidentialité
 
-## Frontend Voyageur
-Routes principales : accueil, explorer, destinations, expériences, hébergements, restaurants, guides, activités, carte, planificateur, favoris, recherche, authentification simulée, profil, voyages, réservations, aide et pages légales.
-
-## Frontend Prestataire
-Routes principales : connexion, tableau de bord, établissement, services, réservations, disponibilités, messages, avis, statistiques, promotions, médias, profil, paramètres et aide.
-
-## Données mock
-Les prix, notes, disponibilités et prestataires sont fictifs et servent uniquement à démontrer le frontend.
-
-## Internationalisation
-La V1 est en français. L'architecture CSS et les composants sont préparés pour l'ajout futur d'une vraie couche i18n et du RTL arabe.
-
-## Préparation backend
-L'authentification, les réservations, les messages et les sauvegardes sont simulés côté frontend. Ils devront être remplacés par des services API lors de l'intégration backend.
+Le brouillon de voyage, la langue et les préférences restent dans le stockage local du navigateur. Aucun mot de passe, paiement ou jeton d’authentification n’est collecté. Consultez [CREDITS.md](CREDITS.md) pour les licences des visuels et de la cartographie.

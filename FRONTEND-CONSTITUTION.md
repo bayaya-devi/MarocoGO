@@ -1,5 +1,7 @@
 # MarocoGO — Frontend Constitution V1
 
+> Amendement Premium (octobre 2026) : la navigation client est désormais une barre supérieure unique, flottante et rétractable composée du symbole, de Préparer, Explorer et Profil. Elle remplace le dock inférieur et toute double navigation. Les langues actives sont le français, l’arabe RTL, l’anglais, l’espagnol et le portugais. La palette de référence est `#006233`, `#C1272D` et `#B8BEC1`. Cet amendement prévaut sur les anciennes descriptions de navigation de ce document.
+
 ## Identité
 MarocoGO est l'expérience numérique de voyage dédiée au Maroc au sein de l'écosystème VoyageGO. Son interface doit être premium, chic, contemporaine, légèrement vive et surtout laisser le voyage dominer visuellement.
 

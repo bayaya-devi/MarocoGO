@@ -1,0 +1,10 @@
+{
+  "name": "MarocoGO",
+  "short_name": "MarocoGO",
+  "start_url": "/MarocoGO/",
+  "scope": "/MarocoGO/",
+  "display": "standalone",
+  "background_color": "#f7f6f2",
+  "theme_color": "#006233",
+  "icons": [{ "src": "/MarocoGO/logo/marocogo-symbol.png", "sizes": "1254x1254", "type": "image/png", "purpose": "any" }]
+}

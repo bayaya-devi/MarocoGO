@@ -48,9 +48,9 @@
   --go-ease-enter: cubic-bezier(.16, 1, .3, 1);
 
   /* MarocoGO country theme */
-  --country-primary: #9e1b2a;
+  --country-primary: #c1272d;
   --country-primary-soft: #f4e4e4;
-  --country-secondary: #17633d;
+  --country-secondary: #006233;
   --country-secondary-soft: #e0eee5;
   --country-accent: #b8bbc0;
   --country-neutral: #73777a;
@@ -59,7 +59,7 @@
   --country-text: #171918;
   --country-muted: #606663;
   --country-border: rgba(23, 25, 24, .11);
-  --country-focus: #b52736;
+  --country-focus: #006233;
 
   --go-glass-01: rgba(255, 253, 249, .64);
   --go-glass-02: rgba(255, 253, 249, .79);
