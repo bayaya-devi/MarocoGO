@@ -1,19 +1,18 @@
-# Crédits cartographiques et visuels
+# Crédits cartographiques et photographiques
 
 ## Cartographie
 
-- Données et tuiles : © contributeurs OpenStreetMap, utilisées avec attribution visible.
+- Données et tuiles : © contributeurs OpenStreetMap, avec attribution visible.
 - Moteur cartographique : Leaflet, licence BSD-2-Clause.
+- Le globe mondial est une visualisation SVG propre à VoyageGo ; les positions utilisent les coordonnées centrales déclarées dans le registre de pays et ne constituent pas des frontières officielles.
 
-## Photographies
+## Photographies validées
 
-Les photographies sont servies depuis Wikimedia Commons dans une résolution adaptée. Les détails complets et historiques de licence restent disponibles sur chaque page source.
+Chaque photographie ci-dessous a été contrôlée visuellement le 17 octobre 2026 : aucun humain ni animal n’y est visible. Les variantes locales WebP/JPEG sont des redimensionnements sans altération documentaire.
 
-- Chefchaouen — Badr Rachadi — CC BY-SA 4.0.
-- Merzouga — Mustang Joe — CC0 1.0.
-- Essaouira — Tonperenstring — CC BY-SA 2.5.
-- Marrakech — Wikimedia Commons — licence Creative Commons indiquée sur la page du fichier.
-- Akchour — Houssain tork — licence Creative Commons indiquée sur la page du fichier.
-- Fès — Mustang Joe — CC0 1.0.
+- Merzouga — Mustang Joe — CC0 1.0 — [source Wikimedia Commons](https://commons.wikimedia.org/wiki/File:The_Merzouga_dunes_of_Morocco.jpg).
+- Fès — Mustang Joe — CC0 1.0 — [source Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Panoramic_view_of_the_Medina_of_Fes.jpg).
+- Essaouira — Tonperenstring — CC BY-SA 2.5 — [source Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Remparts_essaouira_10-01-2007.jpg).
+- Akchour — Houssain tork — CC BY-SA 4.0 — [source Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Cascade_d%27Akchour.jpg).
 
-Les images ne constituent pas une information de disponibilité commerciale. MarocoGO n’affiche aucun prix, avis ou stock fournisseur inventé.
+Les pays sans média validé utilisent un repli graphique explicitement neutre. Aucune photographie générique n’est présentée comme un paysage national.

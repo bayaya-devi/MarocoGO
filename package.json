@@ -1,5 +1,5 @@
 {
-  "name": "marocogo-frontend-v1",
+  "name": "voyagego-frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "test": "vitest run src/core.test.ts",
+    "test": "vitest run src",
     "test:e2e": "playwright test"
   },
   "dependencies": {

@@ -1,59 +1,147 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { voyageGoLocales, type VoyageGoLocale } from './design-system/contracts';
 
-export type Locale = 'fr' | 'ar' | 'en' | 'es' | 'pt';
+export type Locale = VoyageGoLocale;
 
-export const labels = {
-  fr: {
-    prepare: 'Préparer', explore: 'Explorer', profile: 'Profil', home: 'Accueil', back: 'Retour', reduce: 'Réduire la navigation', expand: 'Développer la navigation',
-    heroEyebrow: 'Voyager au Maroc', heroTitle: 'Le Maroc, à votre rythme.', heroCta: 'Découvrir ce lieu', pause: 'Mettre en pause', play: 'Relancer',
-    optional: 'Facultatif', preferencesTitle: 'Qu’aimeriez-vous découvrir ?', preferencesLead: 'Choisissez quelques envies pour personnaliser votre sélection. Vous pourrez les modifier à tout moment.', skip: 'Ignorer', save: 'Enregistrer', reset: 'Réinitialiser',
-    nature: 'Nature', heritage: 'Villes & patrimoine', food: 'Gastronomie', leisure: 'Loisirs', rest: 'Détente', family: 'En famille',
-    selectedForYou: 'Une sélection pour vous', selectedLead: 'Des lieux marocains choisis avec soin, sans catalogue interminable.', prepareTrip: 'Préparer mon voyage', prepareLead: 'Composez un carnet souple, même sans compte.',
-    guided: 'Démarrage guidé', free: 'Démarrage libre', guidedLead: 'Avancez étape par étape, sans obligation.', freeLead: 'Allez directement à ce qui vous intéresse.', summary: 'Récapitulatif', previous: 'Retour', next: 'Suivant', pass: 'Passer', saved: 'Brouillon enregistré sur cet appareil',
-    trip: 'Mon voyage', arrival: 'Vol & arrivée', stay: 'Hébergement', transport: 'Transport', activities: 'Activités', ready: 'Préparatifs', destination: 'Destination', dates: 'Dates', travellers: 'Voyageurs', departure: 'Lieu de départ', budget: 'Budget facultatif', notes: 'Notes', addDay: 'Ajouter une journée', addPlace: 'Ajouter un lieu', simple: 'Vue simple', detailed: 'Vue détaillée', exportPdf: 'Télécharger le PDF', privateShare: 'Lien privé', shareUnavailable: 'Un compte et un service sécurisé seront nécessaires pour créer un lien privé révocable.',
-    partnerOffers: 'Offres partenaires', directOffers: 'Réservation directe', directUnavailable: 'La réservation directe sera activée après connexion d’un fournisseur validé. Aucun paiement n’est collecté.', partnerUnavailable: 'Aucun partenaire commercial n’est connecté pour le moment.', estimated: 'Estimation personnelle',
-    exploreTitle: 'Explorer le Maroc', exploreLead: 'Par thèmes, villes ou recommandations. La carte reste entièrement utilisable sans géolocalisation.', search: 'Rechercher un lieu', locate: 'Utiliser ma position', locationDenied: 'Position non disponible. Recherchez une ville manuellement.', routesUnavailable: 'Le calcul d’itinéraire nécessite un service externe qui n’est pas encore connecté.', addToTrip: 'Ajouter au voyage', favorite: 'Enregistrer', practical: 'Informations indicatives à vérifier avant votre visite.',
-    accountTitle: 'Votre espace MarocoGO', accountLead: 'Préparez sans compte. La synchronisation entre appareils sera disponible lorsque le service de comptes VoyageGo sera connecté.', signIn: 'Se connecter', createAccount: 'Créer un compte', email: 'Adresse e-mail', password: 'Mot de passe', forgot: 'Mot de passe oublié', authUnavailable: 'Connexion indisponible : aucun serveur d’authentification n’est configuré. Vos brouillons restent sur cet appareil.', settings: 'Préférences', language: 'Langue', currency: 'Devise', notifications: 'Notifications', privacy: 'Confidentialité',
-    provider: 'Espace prestataire', providerLead: 'Interface de préparation — aucune réservation ni statistique réelle n’est connectée.', dashboard: 'Tableau de bord', services: 'Offres & services', requests: 'Demandes', providerProfile: 'Profil professionnel', previewData: 'Données de démonstration clairement isolées', noRequests: 'Aucune demande réelle à afficher.',
-    legal: 'Mentions légales', contact: 'Contact', footerPrivacy: 'Confidentialité', legalPlaceholder: 'Informations de l’éditeur à compléter avant exploitation commerciale.', offlineReady: 'Carnet disponible hors connexion après sa première ouverture.', notFound: 'Cette page n’existe pas.', goHome: 'Revenir à l’accueil',
-  },
-  en: {
-    prepare: 'Plan', explore: 'Explore', profile: 'Profile', home: 'Home', back: 'Back', reduce: 'Collapse navigation', expand: 'Expand navigation',
-    heroEyebrow: 'Travel in Morocco', heroTitle: 'Morocco, at your own pace.', heroCta: 'Discover this place', pause: 'Pause', play: 'Play', optional: 'Optional', preferencesTitle: 'What would you like to discover?', preferencesLead: 'Choose a few interests to personalise your selection. You can change them anytime.', skip: 'Skip', save: 'Save', reset: 'Reset', nature: 'Nature', heritage: 'Cities & heritage', food: 'Food', leisure: 'Leisure', rest: 'Relaxation', family: 'Family', selectedForYou: 'Selected for you', selectedLead: 'A concise selection of carefully chosen Moroccan places.', prepareTrip: 'Plan my trip', prepareLead: 'Build a flexible travel journal, even without an account.', guided: 'Guided start', free: 'Free start', guidedLead: 'Move step by step, with no mandatory choices.', freeLead: 'Go straight to what matters to you.', summary: 'Summary', previous: 'Back', next: 'Next', pass: 'Skip', saved: 'Draft saved on this device', trip: 'My trip', arrival: 'Flight & arrival', stay: 'Accommodation', transport: 'Transport', activities: 'Activities', ready: 'Essentials', destination: 'Destination', dates: 'Dates', travellers: 'Travellers', departure: 'Departure place', budget: 'Optional budget', notes: 'Notes', addDay: 'Add a day', addPlace: 'Add a place', simple: 'Simple view', detailed: 'Detailed view', exportPdf: 'Download PDF', privateShare: 'Private link', shareUnavailable: 'An account and secure service will be required to create a revocable private link.', partnerOffers: 'Partner offers', directOffers: 'Direct booking', directUnavailable: 'Direct booking will be enabled after a verified provider is connected. No payment is collected.', partnerUnavailable: 'No commercial partner is connected yet.', estimated: 'Personal estimate', exploreTitle: 'Explore Morocco', exploreLead: 'By theme, city or recommendation. The map works without geolocation.', search: 'Search for a place', locate: 'Use my location', locationDenied: 'Location unavailable. Search for a city manually.', routesUnavailable: 'Route calculation requires an external service that is not connected yet.', addToTrip: 'Add to trip', favorite: 'Save', practical: 'Indicative information—verify before visiting.', accountTitle: 'Your MarocoGO space', accountLead: 'Plan without an account. Cross-device sync will be available when VoyageGo accounts are connected.', signIn: 'Sign in', createAccount: 'Create account', email: 'Email address', password: 'Password', forgot: 'Forgot password', authUnavailable: 'Sign-in unavailable: no authentication server is configured. Drafts remain on this device.', settings: 'Preferences', language: 'Language', currency: 'Currency', notifications: 'Notifications', privacy: 'Privacy', provider: 'Provider space', providerLead: 'Preparation interface—no real bookings or analytics are connected.', dashboard: 'Dashboard', services: 'Offers & services', requests: 'Requests', providerProfile: 'Business profile', previewData: 'Clearly isolated demonstration data', noRequests: 'No real requests to display.', legal: 'Legal notice', contact: 'Contact', footerPrivacy: 'Privacy', legalPlaceholder: 'Publisher details must be completed before commercial operation.', offlineReady: 'Journal available offline after its first opening.', notFound: 'This page does not exist.', goHome: 'Back to home',
-  },
-  es: {
-    prepare: 'Preparar', explore: 'Explorar', profile: 'Perfil', home: 'Inicio', back: 'Volver', reduce: 'Reducir navegación', expand: 'Ampliar navegación', heroEyebrow: 'Viajar por Marruecos', heroTitle: 'Marruecos, a tu ritmo.', heroCta: 'Descubrir este lugar', pause: 'Pausar', play: 'Reanudar', optional: 'Opcional', preferencesTitle: '¿Qué te gustaría descubrir?', preferencesLead: 'Elige algunos intereses para personalizar tu selección. Podrás cambiarlos cuando quieras.', skip: 'Omitir', save: 'Guardar', reset: 'Restablecer', nature: 'Naturaleza', heritage: 'Ciudades y patrimonio', food: 'Gastronomía', leisure: 'Ocio', rest: 'Relax', family: 'En familia', selectedForYou: 'Una selección para ti', selectedLead: 'Lugares de Marruecos elegidos con cuidado, sin un catálogo interminable.', prepareTrip: 'Preparar mi viaje', prepareLead: 'Crea un cuaderno flexible, incluso sin cuenta.', guided: 'Inicio guiado', free: 'Inicio libre', guidedLead: 'Avanza paso a paso, sin obligaciones.', freeLead: 'Ve directamente a lo que te interesa.', summary: 'Resumen', previous: 'Volver', next: 'Siguiente', pass: 'Omitir', saved: 'Borrador guardado en este dispositivo', trip: 'Mi viaje', arrival: 'Vuelo y llegada', stay: 'Alojamiento', transport: 'Transporte', activities: 'Actividades', ready: 'Preparativos', destination: 'Destino', dates: 'Fechas', travellers: 'Viajeros', departure: 'Lugar de salida', budget: 'Presupuesto opcional', notes: 'Notas', addDay: 'Añadir un día', addPlace: 'Añadir un lugar', simple: 'Vista simple', detailed: 'Vista detallada', exportPdf: 'Descargar PDF', privateShare: 'Enlace privado', shareUnavailable: 'Se necesitarán una cuenta y un servicio seguro para crear un enlace privado revocable.', partnerOffers: 'Ofertas de socios', directOffers: 'Reserva directa', directUnavailable: 'La reserva directa se activará tras conectar un proveedor validado. No se cobra ningún pago.', partnerUnavailable: 'Todavía no hay ningún socio comercial conectado.', estimated: 'Estimación personal', exploreTitle: 'Explorar Marruecos', exploreLead: 'Por temas, ciudades o recomendaciones. El mapa funciona sin geolocalización.', search: 'Buscar un lugar', locate: 'Usar mi ubicación', locationDenied: 'Ubicación no disponible. Busca una ciudad manualmente.', routesUnavailable: 'El cálculo de rutas requiere un servicio externo aún no conectado.', addToTrip: 'Añadir al viaje', favorite: 'Guardar', practical: 'Información indicativa: compruébala antes de la visita.', accountTitle: 'Tu espacio MarocoGO', accountLead: 'Prepara sin cuenta. La sincronización estará disponible cuando se conecten las cuentas VoyageGo.', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', email: 'Correo electrónico', password: 'Contraseña', forgot: 'Contraseña olvidada', authUnavailable: 'Inicio de sesión no disponible: no hay servidor de autenticación configurado. Tus borradores permanecen en este dispositivo.', settings: 'Preferencias', language: 'Idioma', currency: 'Moneda', notifications: 'Notificaciones', privacy: 'Privacidad', provider: 'Espacio profesional', providerLead: 'Interfaz de preparación: no hay reservas ni estadísticas reales conectadas.', dashboard: 'Panel', services: 'Ofertas y servicios', requests: 'Solicitudes', providerProfile: 'Perfil profesional', previewData: 'Datos de demostración claramente aislados', noRequests: 'No hay solicitudes reales.', legal: 'Aviso legal', contact: 'Contacto', footerPrivacy: 'Privacidad', legalPlaceholder: 'Los datos del editor deben completarse antes de la explotación comercial.', offlineReady: 'Cuaderno disponible sin conexión tras su primera apertura.', notFound: 'Esta página no existe.', goHome: 'Volver al inicio',
-  },
-  pt: {
-    prepare: 'Preparar', explore: 'Explorar', profile: 'Perfil', home: 'Início', back: 'Voltar', reduce: 'Recolher navegação', expand: 'Expandir navegação', heroEyebrow: 'Viajar em Marrocos', heroTitle: 'Marrocos, ao seu ritmo.', heroCta: 'Descobrir este lugar', pause: 'Pausar', play: 'Retomar', optional: 'Opcional', preferencesTitle: 'O que gostaria de descobrir?', preferencesLead: 'Escolha alguns interesses para personalizar a seleção. Pode alterá-los a qualquer momento.', skip: 'Ignorar', save: 'Guardar', reset: 'Repor', nature: 'Natureza', heritage: 'Cidades e património', food: 'Gastronomia', leisure: 'Lazer', rest: 'Descanso', family: 'Família', selectedForYou: 'Uma seleção para si', selectedLead: 'Lugares marroquinos escolhidos com cuidado, sem catálogo interminável.', prepareTrip: 'Preparar a minha viagem', prepareLead: 'Crie um caderno flexível, mesmo sem conta.', guided: 'Início guiado', free: 'Início livre', guidedLead: 'Avance passo a passo, sem obrigações.', freeLead: 'Vá diretamente ao que lhe interessa.', summary: 'Resumo', previous: 'Voltar', next: 'Seguinte', pass: 'Ignorar', saved: 'Rascunho guardado neste dispositivo', trip: 'A minha viagem', arrival: 'Voo e chegada', stay: 'Alojamento', transport: 'Transporte', activities: 'Atividades', ready: 'Preparativos', destination: 'Destino', dates: 'Datas', travellers: 'Viajantes', departure: 'Local de partida', budget: 'Orçamento opcional', notes: 'Notas', addDay: 'Adicionar dia', addPlace: 'Adicionar local', simple: 'Vista simples', detailed: 'Vista detalhada', exportPdf: 'Descarregar PDF', privateShare: 'Ligação privada', shareUnavailable: 'Será necessária uma conta e um serviço seguro para criar uma ligação privada revogável.', partnerOffers: 'Ofertas de parceiros', directOffers: 'Reserva direta', directUnavailable: 'A reserva direta será ativada após ligar um fornecedor validado. Nenhum pagamento é cobrado.', partnerUnavailable: 'Ainda não existe parceiro comercial ligado.', estimated: 'Estimativa pessoal', exploreTitle: 'Explorar Marrocos', exploreLead: 'Por temas, cidades ou recomendações. O mapa funciona sem geolocalização.', search: 'Pesquisar um local', locate: 'Usar a minha localização', locationDenied: 'Localização indisponível. Pesquise uma cidade manualmente.', routesUnavailable: 'O cálculo de rotas requer um serviço externo ainda não ligado.', addToTrip: 'Adicionar à viagem', favorite: 'Guardar', practical: 'Informação indicativa — confirme antes da visita.', accountTitle: 'O seu espaço MarocoGO', accountLead: 'Prepare sem conta. A sincronização estará disponível quando as contas VoyageGo forem ligadas.', signIn: 'Entrar', createAccount: 'Criar conta', email: 'E-mail', password: 'Palavra-passe', forgot: 'Esqueci a palavra-passe', authUnavailable: 'Início de sessão indisponível: não existe servidor de autenticação configurado. Os rascunhos permanecem neste dispositivo.', settings: 'Preferências', language: 'Idioma', currency: 'Moeda', notifications: 'Notificações', privacy: 'Privacidade', provider: 'Espaço profissional', providerLead: 'Interface de preparação — não existem reservas ou estatísticas reais ligadas.', dashboard: 'Painel', services: 'Ofertas e serviços', requests: 'Pedidos', providerProfile: 'Perfil profissional', previewData: 'Dados de demonstração claramente isolados', noRequests: 'Não existem pedidos reais.', legal: 'Aviso legal', contact: 'Contacto', footerPrivacy: 'Privacidade', legalPlaceholder: 'Os dados do editor devem ser preenchidos antes da exploração comercial.', offlineReady: 'Caderno disponível offline após a primeira abertura.', notFound: 'Esta página não existe.', goHome: 'Voltar ao início',
-  },
-  ar: {
-    prepare: 'خطّط', explore: 'استكشف', profile: 'الملف الشخصي', home: 'الرئيسية', back: 'رجوع', reduce: 'طيّ شريط التنقل', expand: 'توسيع شريط التنقل', heroEyebrow: 'السفر في المغرب', heroTitle: 'المغرب، على إيقاعك.', heroCta: 'اكتشف هذا المكان', pause: 'إيقاف', play: 'تشغيل', optional: 'اختياري', preferencesTitle: 'ماذا تود أن تكتشف؟', preferencesLead: 'اختر بعض الاهتمامات لتخصيص اقتراحاتك. يمكنك تعديلها في أي وقت.', skip: 'تخطّي', save: 'حفظ', reset: 'إعادة الضبط', nature: 'الطبيعة', heritage: 'المدن والتراث', food: 'المطبخ', leisure: 'الترفيه', rest: 'الاسترخاء', family: 'مع العائلة', selectedForYou: 'مختارات لك', selectedLead: 'أماكن مغربية مختارة بعناية، بعيداً عن القوائم الطويلة.', prepareTrip: 'خطّط لرحلتي', prepareLead: 'أنشئ دفتر رحلة مرناً، حتى من دون حساب.', guided: 'بدء موجّه', free: 'بدء حر', guidedLead: 'تقدّم خطوة بخطوة من دون إلزام.', freeLead: 'انتقل مباشرة إلى ما يهمك.', summary: 'الملخّص', previous: 'رجوع', next: 'التالي', pass: 'تخطّي', saved: 'تم حفظ المسودة على هذا الجهاز', trip: 'رحلتي', arrival: 'الرحلة والوصول', stay: 'الإقامة', transport: 'التنقل', activities: 'الأنشطة', ready: 'الاستعدادات', destination: 'الوجهة', dates: 'التواريخ', travellers: 'المسافرون', departure: 'مكان الانطلاق', budget: 'ميزانية اختيارية', notes: 'ملاحظات', addDay: 'إضافة يوم', addPlace: 'إضافة مكان', simple: 'عرض مبسّط', detailed: 'عرض مفصّل', exportPdf: 'تنزيل PDF', privateShare: 'رابط خاص', shareUnavailable: 'يلزم حساب وخدمة آمنة لإنشاء رابط خاص قابل للإلغاء.', partnerOffers: 'عروض الشركاء', directOffers: 'الحجز المباشر', directUnavailable: 'سيتاح الحجز المباشر بعد ربط مزوّد معتمد. لا يتم تحصيل أي دفعة.', partnerUnavailable: 'لا يوجد شريك تجاري متصل حالياً.', estimated: 'تقدير شخصي', exploreTitle: 'استكشف المغرب', exploreLead: 'حسب الموضوع أو المدينة أو الاقتراحات. تعمل الخريطة من دون تحديد الموقع.', search: 'ابحث عن مكان', locate: 'استخدم موقعي', locationDenied: 'الموقع غير متاح. ابحث عن مدينة يدوياً.', routesUnavailable: 'يتطلب حساب المسار خدمة خارجية غير متصلة بعد.', addToTrip: 'أضف إلى الرحلة', favorite: 'حفظ', practical: 'معلومات إرشادية يُرجى التحقق منها قبل الزيارة.', accountTitle: 'مساحتك في MarocoGO', accountLead: 'خطّط من دون حساب. ستتاح المزامنة بين الأجهزة عند ربط حسابات VoyageGo.', signIn: 'تسجيل الدخول', createAccount: 'إنشاء حساب', email: 'البريد الإلكتروني', password: 'كلمة المرور', forgot: 'نسيت كلمة المرور', authUnavailable: 'تسجيل الدخول غير متاح: لا يوجد خادم مصادقة مهيأ. تبقى مسوداتك على هذا الجهاز.', settings: 'التفضيلات', language: 'اللغة', currency: 'العملة', notifications: 'الإشعارات', privacy: 'الخصوصية', provider: 'فضاء مقدّم الخدمة', providerLead: 'واجهة تحضيرية — لا توجد حجوزات أو إحصاءات حقيقية متصلة.', dashboard: 'لوحة التحكم', services: 'العروض والخدمات', requests: 'الطلبات', providerProfile: 'الملف المهني', previewData: 'بيانات تجريبية معزولة بوضوح', noRequests: 'لا توجد طلبات حقيقية لعرضها.', legal: 'إشعار قانوني', contact: 'اتصل بنا', footerPrivacy: 'الخصوصية', legalPlaceholder: 'يجب استكمال بيانات الناشر قبل التشغيل التجاري.', offlineReady: 'يتوفر دفتر الرحلة دون اتصال بعد فتحه أول مرة.', notFound: 'هذه الصفحة غير موجودة.', goHome: 'العودة إلى الرئيسية',
-  },
-} as const;
+const fr = {
+  skip: 'Aller au contenu', language: 'Langue', globalTitle: 'Le monde vous attend', globalKicker: 'VoyageGo · Accueil mondial',
+  globalLead: 'Faites tourner le monde, choisissez un pays et entrez dans une expérience construite avec soin.',
+  globeLabel: 'Globe interactif des pays VoyageGo', rotateLeft: 'Tourner vers l’ouest', rotateRight: 'Tourner vers l’est',
+  zoomIn: 'Agrandir le globe', zoomOut: 'Réduire le globe', resetGlobe: 'Réinitialiser le globe',
+  chooseCountry: 'Choisir un pays', countrySearch: 'Rechercher un pays', available: 'Expérience disponible',
+  comingSoon: 'Expérience en préparation', enterCountry: 'Entrer au Maroc',
+  landscapeUnavailable: 'Aucun paysage national vérifié n’est publié pour ce pays.',
+  worldSignature: 'VoyageGo — une fenêtre ouverte sur le monde.', countrySignature: 'VoyageGo Maroc — le pays, dans toute sa profondeur.',
+  voyageInfo: 'VoyageGo Info', information: 'Informations VoyageGo', close: 'Fermer', about: 'À propos', contact: 'Contact',
+  help: 'Aide', legal: 'Mentions légales', privacy: 'Confidentialité', terms: 'Conditions d’utilisation',
+  cookies: 'Gestion des cookies', credits: 'Crédits photographiques', moroccoKicker: 'VoyageGo · Maroc',
+  moroccoTitle: 'Le Maroc, de l’horizon au détail.',
+  moroccoLead: 'Paysages, villes et récits se répondent dans une expérience unique, intégrée à VoyageGo.',
+  explore: 'Explorer', plan: 'Planifier', discover: 'Découvrir',
+  exploreLead: 'Lire les régions, comparer les atmosphères et situer les destinations.',
+  planLead: 'Construire un brouillon de voyage sans compte, réservation ni paiement simulé.',
+  discoverLead: 'Approcher le patrimoine, les langues et les savoir-faire dans leur géographie.',
+  open: 'Ouvrir', destinations: 'Destinations marocaines',
+  destinationsLead: 'Une sélection éditoriale vérifiée, structurée pour s’étendre sans devenir un catalogue.',
+  searchPlaces: 'Rechercher une destination', noResults: 'Aucune destination ne correspond à cette recherche.',
+  mapLabel: 'Carte des destinations marocaines', startPlan: 'Commencer mon parcours',
+  localDraftNotice: 'Ce brouillon reste uniquement sur cet appareil. Il n’est ni synchronisé, ni réservé.',
+  destination: 'Destination', startDate: 'Date d’arrivée', endDate: 'Date de départ', travellers: 'Voyageurs',
+  transport: 'Transport', accommodation: 'Hébergement', activities: 'Activités', itinerary: 'Itinéraire',
+  budget: 'Budget indicatif', notes: 'Notes', savedLocal: 'Brouillon enregistré localement',
+  transportPlaceholder: 'Ex. train, voiture, transports locaux', accommodationPlaceholder: 'Préférences, sans réservation',
+  activitiesPlaceholder: 'Idées à vérifier avant le départ', itineraryPlaceholder: 'Étapes et rythme envisagés',
+  budgetPlaceholder: 'Montant personnel, sans prix simulé', discoverTitle: 'Comprendre avant de parcourir.',
+  discoverIntro: 'Des portes d’entrée éditoriales, sans prétendre remplacer les sources locales ou institutionnelles.',
+  details: 'Voir le lieu', addToTrip: 'Ajouter au brouillon', addedToTrip: 'Ajouté au brouillon',
+  backMorocco: 'Retour à l’accueil Maroc', backWorld: 'Retour à l’accueil mondial',
+  accountUnavailable: 'Les comptes VoyageGo ne sont pas encore connectés. Le brouillon local reste utilisable sans compte.',
+  searchSite: 'Recherche VoyageGo Maroc', searchHint: 'Rechercher Fès, désert, patrimoine…',
+  notFound: 'Cette page n’existe pas.',
+  infoPreparation: 'Cette section institutionnelle est préparée mais doit être validée avant toute exploitation commerciale.',
+  mediaCreditsIntro: 'Médias authentiques audités : aucun humain ni animal visible. Les licences et sources sont indiquées ci-dessous.',
+};
 
-export type TranslationKey = keyof typeof labels.fr;
-const localeNames: Record<Locale, string> = { fr: 'Français', ar: 'العربية', en: 'English', es: 'Español', pt: 'Português' };
-export const supported: Locale[] = ['fr', 'ar', 'en', 'es', 'pt'];
+export type TranslationKey = keyof typeof fr;
 
-type I18nValue = { locale: Locale; setLocale: (locale: Locale) => void; t: (key: TranslationKey) => string; localeNames: typeof localeNames };
-const I18nContext = createContext<I18nValue | null>(null);
+const en: Record<TranslationKey, string> = {
+  skip: 'Skip to content', language: 'Language', globalTitle: 'The world is waiting', globalKicker: 'VoyageGo · World home',
+  globalLead: 'Turn the world, choose a country and enter an experience built with care.', globeLabel: 'Interactive VoyageGo country globe',
+  rotateLeft: 'Rotate west', rotateRight: 'Rotate east', zoomIn: 'Zoom in', zoomOut: 'Zoom out', resetGlobe: 'Reset globe',
+  chooseCountry: 'Choose a country', countrySearch: 'Search for a country', available: 'Experience available',
+  comingSoon: 'Experience in preparation', enterCountry: 'Enter Morocco',
+  landscapeUnavailable: 'No verified national landscape is published for this country.',
+  worldSignature: 'VoyageGo — a window onto the world.', countrySignature: 'VoyageGo Morocco — the country in all its depth.',
+  voyageInfo: 'VoyageGo Info', information: 'VoyageGo information', close: 'Close', about: 'About', contact: 'Contact', help: 'Help',
+  legal: 'Legal notice', privacy: 'Privacy', terms: 'Terms of use', cookies: 'Cookie management', credits: 'Photo credits',
+  moroccoKicker: 'VoyageGo · Morocco', moroccoTitle: 'Morocco, from horizon to detail.',
+  moroccoLead: 'Landscapes, cities and stories come together in one experience within VoyageGo.',
+  explore: 'Explore', plan: 'Plan', discover: 'Discover',
+  exploreLead: 'Read the regions, compare atmospheres and locate destinations.',
+  planLead: 'Build a trip draft without an account, booking or simulated payment.',
+  discoverLead: 'Approach heritage, languages and craft through their geography.', open: 'Open',
+  destinations: 'Moroccan destinations', destinationsLead: 'A verified editorial selection, structured to grow without becoming a catalogue.',
+  searchPlaces: 'Search destinations', noResults: 'No destination matches this search.', mapLabel: 'Map of Moroccan destinations',
+  startPlan: 'Start planning', localDraftNotice: 'This draft stays on this device only. It is not synced or booked.',
+  destination: 'Destination', startDate: 'Arrival date', endDate: 'Departure date', travellers: 'Travellers',
+  transport: 'Transport', accommodation: 'Accommodation', activities: 'Activities', itinerary: 'Itinerary',
+  budget: 'Indicative budget', notes: 'Notes', savedLocal: 'Draft saved locally',
+  transportPlaceholder: 'E.g. train, car, local transport', accommodationPlaceholder: 'Preferences, without booking',
+  activitiesPlaceholder: 'Ideas to verify before departure', itineraryPlaceholder: 'Planned stages and pace',
+  budgetPlaceholder: 'Personal amount, without simulated prices', discoverTitle: 'Understand before you travel.',
+  discoverIntro: 'Editorial entry points that do not claim to replace local or institutional sources.', details: 'View place',
+  addToTrip: 'Add to draft', addedToTrip: 'Added to draft', backMorocco: 'Back to Morocco home', backWorld: 'Back to world home',
+  accountUnavailable: 'VoyageGo accounts are not connected yet. The local draft remains available without an account.',
+  searchSite: 'Search VoyageGo Morocco', searchHint: 'Search Fez, desert, heritage…', notFound: 'This page does not exist.',
+  infoPreparation: 'This institutional section is prepared but requires validation before commercial use.',
+  mediaCreditsIntro: 'Audited authentic media: no visible people or animals. Licences and sources are listed below.',
+};
 
-function initialLocale(): Locale {
-  const stored = localStorage.getItem('marocogo.locale') as Locale | null;
-  if (stored && supported.includes(stored)) return stored;
-  const browser = navigator.language.slice(0, 2) as Locale;
-  return supported.includes(browser) ? browser : 'fr';
+const ar: Record<TranslationKey, string> = {
+  skip: 'انتقل إلى المحتوى', language: 'اللغة', globalTitle: 'العالم ينتظرك', globalKicker: 'فوياج غو · الصفحة العالمية',
+  globalLead: 'حرّك العالم واختر بلداً وادخل تجربة صُممت بعناية.', globeLabel: 'كرة تفاعلية لبلدان فوياج غو',
+  rotateLeft: 'تدوير نحو الغرب', rotateRight: 'تدوير نحو الشرق', zoomIn: 'تكبير الكرة', zoomOut: 'تصغير الكرة',
+  resetGlobe: 'إعادة ضبط الكرة', chooseCountry: 'اختر بلداً', countrySearch: 'ابحث عن بلد', available: 'التجربة متاحة',
+  comingSoon: 'التجربة قيد الإعداد', enterCountry: 'ادخل إلى المغرب', landscapeUnavailable: 'لا توجد صورة وطنية موثقة منشورة لهذا البلد.',
+  worldSignature: 'فوياج غو — نافذة مفتوحة على العالم.', countrySignature: 'فوياج غو المغرب — البلد بكل أعماقه.',
+  voyageInfo: 'معلومات فوياج غو', information: 'معلومات فوياج غو', close: 'إغلاق', about: 'من نحن', contact: 'اتصل بنا',
+  help: 'مساعدة', legal: 'إشعار قانوني', privacy: 'الخصوصية', terms: 'شروط الاستخدام',
+  cookies: 'إدارة ملفات الارتباط', credits: 'حقوق الصور', moroccoKicker: 'فوياج غو · المغرب',
+  moroccoTitle: 'المغرب، من الأفق إلى التفاصيل.',
+  moroccoLead: 'تتجاوب المناظر والمدن والحكايات في تجربة واحدة داخل فوياج غو.',
+  explore: 'استكشف', plan: 'خطط', discover: 'اكتشف', exploreLead: 'اقرأ الجهات وقارن الأجواء وحدد الوجهات.',
+  planLead: 'أنشئ مسودة رحلة دون حساب أو حجز أو دفع وهمي.',
+  discoverLead: 'اقترب من التراث واللغات والمهارات ضمن جغرافيتها.', open: 'افتح',
+  destinations: 'وجهات مغربية', destinationsLead: 'اختيار تحريري موثق قابل للتوسع دون أن يتحول إلى كتالوج.',
+  searchPlaces: 'ابحث عن وجهة', noResults: 'لا توجد وجهة مطابقة للبحث.', mapLabel: 'خريطة الوجهات المغربية',
+  startPlan: 'ابدأ التخطيط', localDraftNotice: 'تبقى هذه المسودة على هذا الجهاز فقط. لا تتم مزامنتها ولا حجزها.',
+  destination: 'الوجهة', startDate: 'تاريخ الوصول', endDate: 'تاريخ المغادرة', travellers: 'المسافرون',
+  transport: 'النقل', accommodation: 'الإقامة', activities: 'الأنشطة', itinerary: 'المسار',
+  budget: 'ميزانية تقديرية', notes: 'ملاحظات', savedLocal: 'حُفظت المسودة محلياً',
+  transportPlaceholder: 'مثال: قطار، سيارة، نقل محلي', accommodationPlaceholder: 'تفضيلات دون حجز',
+  activitiesPlaceholder: 'أفكار للتحقق قبل السفر', itineraryPlaceholder: 'المراحل والإيقاع المقترحان',
+  budgetPlaceholder: 'مبلغ شخصي دون أسعار وهمية', discoverTitle: 'افهم قبل أن تسافر.',
+  discoverIntro: 'مداخل تحريرية لا تدعي أنها بديل للمصادر المحلية أو الرسمية.', details: 'عرض المكان',
+  addToTrip: 'أضف إلى المسودة', addedToTrip: 'أضيف إلى المسودة', backMorocco: 'العودة إلى صفحة المغرب',
+  backWorld: 'العودة إلى الصفحة العالمية',
+  accountUnavailable: 'حسابات فوياج غو غير متصلة بعد. تبقى المسودة المحلية متاحة دون حساب.',
+  searchSite: 'البحث في فوياج غو المغرب', searchHint: 'ابحث عن فاس، الصحراء، التراث…',
+  notFound: 'هذه الصفحة غير موجودة.',
+  infoPreparation: 'هذا القسم المؤسسي مُعدّ لكنه يحتاج إلى المصادقة قبل أي استخدام تجاري.',
+  mediaCreditsIntro: 'صور أصلية مدققة: لا أشخاص ولا حيوانات ظاهرة. التراخيص والمصادر مذكورة أدناه.',
+};
+
+export const labels: Record<Locale, Record<TranslationKey, string>> = { fr, en, ar };
+export const supported = voyageGoLocales;
+export const localeNames: Record<Locale, string> = { fr: 'Français', en: 'English', ar: 'العربية' };
+
+const I18nContext = createContext<{
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+  t: (key: TranslationKey) => string;
+  localeNames: typeof localeNames;
+} | null>(null);
+
+const STORAGE_KEY = 'voyagego.locale.v1';
+
+function readLocale(): Locale {
+  const current = localStorage.getItem(STORAGE_KEY);
+  if (voyageGoLocales.includes(current as Locale)) return current as Locale;
+  const legacy = localStorage.getItem('marocogo.locale');
+  return voyageGoLocales.includes(legacy as Locale) ? legacy as Locale : 'fr';
 }
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(initialLocale);
-  const setLocale = (value: Locale) => { localStorage.setItem('marocogo.locale', value); setLocaleState(value); };
+export function I18nProvider({ children }: { children: ReactNode }): React.JSX.Element {
+  const [locale, setLocaleState] = useState<Locale>(readLocale);
+  const setLocale = (value: Locale) => {
+    localStorage.setItem(STORAGE_KEY, value);
+    setLocaleState(value);
+  };
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
   }, [locale]);
-  const value = useMemo<I18nValue>(() => ({ locale, setLocale, t: (key) => labels[locale][key], localeNames }), [locale]);
+  const value = useMemo(() => ({ locale, setLocale, t: (key: TranslationKey) => labels[locale][key], localeNames }), [locale]);
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 

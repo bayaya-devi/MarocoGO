@@ -2,10 +2,10 @@ import { expect, test } from '@playwright/test';
 import axe from 'axe-core';
 
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('marocogo.locale', 'fr'));
+  await page.addInitScript(() => localStorage.setItem('voyagego.locale.v1', 'fr'));
 });
 
-for (const route of ['./', './prepare', './explore', './profile']) {
+for (const route of ['./', './ma', './ma/explorer', './ma/planifier', './ma/decouvrir', './info/legal']) {
   test(`no serious accessibility violation on ${route}`, async ({ page }) => {
     await page.goto(route, { waitUntil: 'domcontentloaded' });
     await page.addScriptTag({ content: axe.source });

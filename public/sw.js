@@ -1,7 +1,8 @@
-const VERSION = 'marocogo-v2';
+const VERSION = 'voyagego-v1';
 const APP_CACHE = `${VERSION}-app`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
-const APP_SHELL = ['/MarocoGO/', '/MarocoGO/index.html', '/MarocoGO/logo/marocogo-symbol.png'];
+const BASE = new URL('./', self.registration.scope).pathname;
+const APP_SHELL = [BASE, `${BASE}index.html`];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(APP_CACHE).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
@@ -19,6 +20,6 @@ self.addEventListener('fetch', (event) => {
       const copy = response.clone();
       caches.open(RUNTIME_CACHE).then((cache) => cache.put(event.request, copy));
       return response;
-    }).catch(() => caches.match(event.request).then((cached) => cached || caches.match('/MarocoGO/index.html'))));
+    }).catch(() => caches.match(event.request).then((cached) => cached || caches.match(`${BASE}index.html`))));
   }
 });

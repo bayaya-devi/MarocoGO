@@ -1,36 +1,37 @@
-# MarocoGO
+# VoyageGo
 
-Portail national marocain de l’écosystème VoyageGo. Cette version transforme le prototype initial en une expérience frontend premium, multilingue et installable, tout en restant honnête sur les services externes qui ne sont pas encore connectés.
+VoyageGo est une expérience mondiale de voyage. L’accueil permet de manipuler une planisphère légère, de sélectionner des pays et d’entrer dans les expériences nationales publiées. Le Maroc est le premier pays actif de cette nouvelle architecture.
 
-## Fonctionnalités opérationnelles
+## Expériences opérationnelles
 
-- Accueil éditorial avec carrousel accessible, pause et préférences facultatives.
-- Navigation supérieure unique, compacte et rétractable.
-- Cinq langues : français, arabe RTL, anglais, espagnol et portugais.
-- Explorer avec carte Leaflet/OpenStreetMap réelle, recherche locale et géolocalisation sur demande.
-- Préparation guidée en sept étapes et mode libre utilisant le même modèle de voyage.
-- Carnet sauvegardé localement, vues simple/détaillée, réorganisation sans glisser-déposer et export PDF.
-- Favoris et ajout de lieux au voyage.
-- Service worker et reprise hors connexion de l’application et du carnet déjà chargé.
-- Interface prestataire responsive clairement identifiée comme non connectée.
-- Pages légales avec champs institutionnels restant à compléter.
+- Accueil mondial cinématographique avec globe SVG manipulable, zoom, rotation et liste de pays accessible sans WebGL.
+- Registre extensible de pays avec statuts explicites : Maroc publié, autres pays en préparation.
+- Paysage national uniquement lorsqu’un média authentique et licencié a été validé.
+- Expérience Maroc avec les pôles Explorer, Planifier et Découvrir.
+- Navigation nationale flottante, responsive, distincte du retour mondial.
+- Recherche Maroc, bascule FR/EN/AR, arabe RTL et VoyageGo Info.
+- Carte Leaflet/OpenStreetMap des destinations marocaines.
+- Brouillon de voyage local migré depuis l’ancienne clé MarocoGO.
+- Médias responsives WebP avec JPEG de repli, sans personne ni animal visible.
 
-## Fonctions préparées, non connectées
+## Limites explicites
 
-Les comptes VoyageGo, réservations, paiements, offres partenaires, taux de change, itinéraires routiers, notifications serveur, synchronisation multi-appareils et liens privés exigent des services backend validés. L’interface ne simule aucune confirmation réelle.
+Les comptes, réservations, paiements, disponibilités, prix, synchronisation multi-appareils et services prestataires ne sont pas connectés. L’interface ne simule aucun succès transactionnel. Les autres pays restent sélectionnables mais n’ouvrent aucune ancienne expérience nationale.
 
 ## Développement
 
-```bash
-npm ci
-npm run dev
-npm test
-npm run build
-npm run test:e2e
-```
+    npm ci
+    npm run dev
+    npm test
+    npm run build
+    npm run test:e2e
 
-Le projet utilise React, TypeScript, Vite, React Router, Leaflet, jsPDF, Vitest, Playwright et axe-core. GitHub Pages publie le contenu de `dist` sous `/MarocoGO/` via `.github/workflows/deploy.yml`.
+Le projet utilise React, TypeScript, Vite, React Router, Leaflet, Vitest, Playwright et axe-core. GitHub Pages publie le dossier dist sous le chemin technique /MarocoGO/ via .github/workflows/deploy.yml.
 
-## Données et confidentialité
+## Documentation
 
-Le brouillon de voyage, la langue et les préférences restent dans le stockage local du navigateur. Aucun mot de passe, paiement ou jeton d’authentification n’est collecté. Consultez [CREDITS.md](CREDITS.md) pour les licences des visuels et de la cartographie.
+- [Frontend Constitution](FRONTEND-CONSTITUTION.md)
+- [Architecture cible](docs/01-ARCHITECTURE-CIBLE.md)
+- [Design system](docs/design-system/README.md)
+- [Crédits média](CREDITS.md)
+- [Rapport d’implémentation du Prompt 03](PROMPT-03-REPORT.md)

@@ -1,7 +1,7 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef } from "react";
-import type { Place } from "../data/places";
+import type { MoroccoPlace } from "../countries/ma/content";
 import type { Locale } from "../i18n";
 
 export function MapCanvas({
@@ -12,7 +12,7 @@ export function MapCanvas({
   positionLabel,
   onSelect,
 }: {
-  places: Place[];
+  places: readonly MoroccoPlace[];
   selected?: string;
   locale: Locale;
   userPosition?: [number, number] | null;
@@ -86,7 +86,8 @@ export function MapCanvas({
     <div
       className="real-map"
       ref={elementRef}
-      aria-label={`MarocoGO · ${places.length}`}
+      role="region"
+      aria-label={`VoyageGo · ${places.length}`}
     />
   );
 }
