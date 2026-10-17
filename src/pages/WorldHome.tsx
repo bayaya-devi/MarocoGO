@@ -52,7 +52,11 @@ export default function WorldHome(): React.JSX.Element {
             locale={locale}
             selectedCode={selected?.code}
             onSelect={setSelected}
-            labels={{ globe: t('globeLabel'), rotateLeft: t('rotateLeft'), rotateRight: t('rotateRight'), zoomIn: t('zoomIn'), zoomOut: t('zoomOut'), reset: t('resetGlobe') }}
+            labels={{
+              globe: t('globeLabel'), rotateLeft: t('rotateLeft'), rotateRight: t('rotateRight'),
+              zoomIn: t('zoomIn'), zoomOut: t('zoomOut'), reset: t('resetGlobe'), loading: t('globeLoading'),
+              unavailable: t('globeUnavailable'), fallback: t('globeFallback'), retry: t('retry3d'),
+            }}
           />
         </section>
         <section className="country-index" aria-labelledby="country-index-title">

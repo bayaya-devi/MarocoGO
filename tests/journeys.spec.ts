@@ -4,6 +4,36 @@ test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('voyagego.locale.v1', 'fr'));
 });
 
+test('3D globe rotates, zooms, selects Morocco geographically and recovers from context loss', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('./', { waitUntil: 'domcontentloaded' });
+  const globe = page.locator('.world-globe');
+  const canvas = globe.locator('canvas');
+  await expect(globe).toHaveAttribute('data-renderer', 'ready');
+  await expect(canvas).toBeVisible();
+
+  await page.getByRole('button', { name: 'Réinitialiser le globe' }).click();
+  await canvas.evaluate((element) => element.scrollIntoView({ block: 'center' }));
+  const box = await canvas.boundingBox();
+  expect(box).not.toBeNull();
+  await page.mouse.click(box!.x + box!.width * .525, box!.y + box!.height * .19);
+  await expect(page.locator('.selected-country h2')).toHaveText('Maroc');
+
+  const beforeRotation = await canvas.screenshot();
+  await page.getByRole('button', { name: 'Tourner vers l’est' }).click();
+  const afterRotation = await canvas.screenshot();
+  expect(afterRotation.equals(beforeRotation)).toBe(false);
+
+  await page.getByRole('button', { name: 'Agrandir le globe' }).click();
+  await expect(page.getByRole('button', { name: 'Réduire le globe' })).toBeEnabled();
+
+  await canvas.evaluate((element) => element.dispatchEvent(new Event('webglcontextlost', { cancelable: true })));
+  await expect(page.getByText('Le rendu 3D n’est pas disponible sur cet appareil.')).toBeVisible();
+  await page.getByRole('button', { name: 'Réessayer la 3D' }).click();
+  await expect(globe).toHaveAttribute('data-renderer', 'ready');
+  await expect(globe.locator('canvas')).toBeVisible();
+});
+
 test('world globe selects honest country states and enters Morocco', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
@@ -13,6 +43,13 @@ test('world globe selects honest country states and enters Morocco', async ({ pa
   for (const name of ['Tourner vers l’ouest', 'Tourner vers l’est', 'Agrandir le globe', 'Réduire le globe', 'Réinitialiser le globe']) {
     await expect(page.getByRole('button', { name })).toBeVisible();
   }
+
+  const liveCanvas = page.locator('.world-globe canvas');
+  await expect(page.locator('.world-globe')).toHaveAttribute('data-renderer', 'ready');
+  const beforeAutoRotation = await liveCanvas.screenshot();
+  await page.waitForTimeout(700);
+  const afterAutoRotation = await liveCanvas.screenshot();
+  expect(afterAutoRotation.equals(beforeAutoRotation)).toBe(false);
 
   await page.locator('.country-list button').filter({ hasText: 'France' }).click();
   await expect(page.getByText('Expérience en préparation').first()).toBeVisible();
@@ -105,7 +142,7 @@ test('retired legacy routes are no longer active', async ({ page }) => {
 test('reduced motion preference disables decorative movement', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('./', { waitUntil: 'domcontentloaded' });
-  const motion = await page.locator('.globe-sphere').evaluate((element) => {
+  const motion = await page.locator('.globe-canvas-shell').evaluate((element) => {
     const styles = getComputedStyle(element);
     return { animation: styles.animationName, transition: styles.transitionDuration };
   });

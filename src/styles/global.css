@@ -54,26 +54,21 @@ html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 { font-family: "Noto 
 .light-cta, .solid-action { min-block-size: 3rem; display: inline-flex; align-items: center; justify-content: center; gap: .6rem; padding-inline: 1.1rem; border: 0; border-radius: var(--vg-radius-round); background: #f6faf7; color: #10231d; font-weight: 800; text-decoration: none; }
 .light-cta svg, .solid-action svg { inline-size: 1.1rem; }
 
-.world-globe { width: min(100%, 44rem); justify-self: center; }
-.globe-stage { position: relative; aspect-ratio: 1; touch-action: none; cursor: grab; user-select: none; }
-.globe-stage:active { cursor: grabbing; }
-.globe-sphere { inline-size: 100%; block-size: 100%; filter: drop-shadow(0 2rem 4rem rgba(0,0,0,.45)); animation: globe-arrive 1.2s var(--vg-motion-ease-enter) both; }
-.globe-halo { fill: rgba(123,210,209,.08); stroke: rgba(170,231,224,.25); stroke-width: 2; }
-.globe-ocean { stroke: rgba(215,250,242,.48); stroke-width: 1.5; }
-.globe-grid { transition: transform var(--vg-motion-normal) linear; }
-.globe-grid ellipse { fill: none; stroke: rgba(219,246,238,.15); stroke-width: 1; }
-.globe-land { fill: rgba(165,198,170,.34); stroke: rgba(223,241,219,.28); stroke-width: 1; }
-.globe-land.secondary { fill: rgba(190,164,110,.27); }
-.globe-country { position: absolute; z-index: 2; transform: translate(-50%, -50%); min-inline-size: 2rem; min-block-size: 2rem; padding: .35rem; border: 1px solid rgba(255,255,255,.44); border-radius: var(--vg-radius-round); background: rgba(5,17,21,.78); color: #fff; box-shadow: 0 .35rem 1rem rgba(0,0,0,.3); }
-html[dir="rtl"] .globe-country { transform: translate(50%, -50%); }
-.globe-country > span { font-size: .65rem; font-weight: 900; }
-.globe-country strong { position: absolute; inset-block-start: calc(100% + .4rem); inset-inline-start: 50%; transform: translateX(-50%); width: max-content; max-width: 8rem; padding: .3rem .45rem; border-radius: .5rem; background: rgba(4,13,17,.9); font-size: .7rem; opacity: 0; pointer-events: none; }
-html[dir="rtl"] .globe-country strong { transform: translateX(50%); }
-.globe-country:hover strong, .globe-country:focus-visible strong, .globe-country[data-selected="true"] strong { opacity: 1; }
-.globe-country[data-status="published"] { background: #18754b; }
-.globe-country[data-selected="true"] { box-shadow: 0 0 0 .25rem rgba(255,255,255,.24), 0 .6rem 1.5rem rgba(0,0,0,.4); }
+.world-globe { width: min(100%, 48rem); justify-self: center; }
+.globe-canvas-shell { position: relative; aspect-ratio: 1; min-block-size: 18rem; overflow: hidden; border-radius: 50%; touch-action: none; user-select: none; filter: drop-shadow(0 2rem 4rem rgba(0,0,0,.45)); animation: globe-arrive 1.2s var(--vg-motion-ease-enter) both; }
+.globe-canvas-shell::after { content: ""; position: absolute; pointer-events: none; inset: 8%; border: 1px solid rgba(185,231,225,.12); border-radius: 50%; box-shadow: 0 0 4rem rgba(81,178,190,.12); }
+.globe-canvas-shell canvas { display: block; inline-size: 100% !important; block-size: 100% !important; cursor: grab; }
+.globe-canvas-shell canvas:active { cursor: grabbing; }
+.globe-loading, .globe-fallback { position: absolute; z-index: 3; inset: 0; display: grid; place-content: center; justify-items: center; gap: .75rem; padding: 2rem; text-align: center; background: radial-gradient(circle, rgba(26,78,91,.58), rgba(5,16,21,.3) 58%, transparent 72%); }
+.globe-loading span { inline-size: 3.5rem; block-size: 3.5rem; border: 1px solid rgba(201,239,233,.2); border-block-start-color: #b8e3dc; border-radius: 50%; animation: globe-spin 1.4s linear infinite; }
+.globe-fallback strong { max-inline-size: 24rem; font-size: var(--vg-type-subtitle); }
+.globe-fallback a { color: #b6e5d6; font-weight: 800; }
+.globe-fallback button { min-block-size: var(--vg-size-touch-min); padding-inline: 1rem; border: 1px solid rgba(255,255,255,.24); border-radius: var(--vg-radius-round); background: rgba(7,25,31,.72); color: #fff; }
+.globe-fallback-orbit { inline-size: 8rem; block-size: 8rem; display: grid; place-items: center; border: 1px solid rgba(193,233,229,.28); border-radius: 50%; transform: rotate(-18deg); }
+.globe-fallback-orbit span { inline-size: 4.8rem; block-size: 4.8rem; border-radius: 50%; background: radial-gradient(circle at 35% 28%, #8bc2c2, #1b6676 55%, #0a2832); }
 .globe-controls { display: flex; justify-content: center; gap: .55rem; margin-block-start: var(--vg-space-3); }
 .globe-controls button { inline-size: var(--vg-size-touch-min); block-size: var(--vg-size-touch-min); display: grid; place-items: center; border: 1px solid rgba(255,255,255,.25); border-radius: 50%; background: rgba(5,16,21,.55); color: #fff; backdrop-filter: blur(.8rem); }
+.globe-controls button:hover:not(:disabled) { background: rgba(89,165,151,.38); border-color: rgba(205,242,232,.5); }
 .globe-controls svg { inline-size: 1.05rem; }
 
 .country-index { width: min(100% - 2rem, 80rem); margin-inline: auto; padding-block: clamp(4rem, 9vw, 8rem); border-block-start: 1px solid rgba(255,255,255,.14); }
@@ -190,6 +185,7 @@ html[dir="rtl"] .globe-country strong { transform: translateX(50%); }
 .not-found a { font-weight: 800; }
 
 @keyframes globe-arrive { from { opacity: 0; transform: scale(.86) rotate(-6deg); } }
+@keyframes globe-spin { to { transform: rotate(360deg); } }
 @keyframes landscape-in { from { opacity: 0; transform: scale(1.03); } }
 
 @media (min-width: 48rem) {
@@ -221,10 +217,10 @@ html[dir="rtl"] .text-link svg { transform: rotate(180deg); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .globe-sphere, .world-landscape, .story-tile img { animation: none; transition: none; transform: none; }
+  .globe-canvas-shell, .globe-loading span, .world-landscape, .story-tile img { animation: none; transition: none; transform: none; }
 }
 
 @media (forced-colors: active) {
   .world-page, .country-hero, .hub-scene { forced-color-adjust: none; }
-  .globe-country, .country-list button, .solid-action, .light-cta { border: 2px solid ButtonText; }
+  .globe-controls button, .globe-fallback button, .country-list button, .solid-action, .light-cta { border: 2px solid ButtonText; }
 }

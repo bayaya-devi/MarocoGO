@@ -4,7 +4,9 @@
 
 - Données et tuiles : © contributeurs OpenStreetMap, avec attribution visible.
 - Moteur cartographique : Leaflet, licence BSD-2-Clause.
-- Le globe mondial est une visualisation SVG propre à VoyageGo ; les positions utilisent les coordonnées centrales déclarées dans le registre de pays et ne constituent pas des frontières officielles.
+- Frontières du globe 3D : Natural Earth Admin 0, redistribution World Atlas 2.0.2 (ISC), coordonnées sphériques 1:110m et identifiants ISO 3166-1 numériques.
+- Texture terrestre : NASA/Goddard Space Flight Center Scientific Visualization Studio, Blue Marble Next Generation, crédit Reto Stockli (NASA/GSFC) et NASA Earth Observatory — [source NASA SVS](https://svs.gsfc.nasa.gov/2915).
+- Moteur 3D : Three.js et React Three Fiber. La sélection directe teste le point touché contre les polygones Natural Earth ; les coordonnées centrales servent uniquement à orienter le globe vers le pays sélectionné.
 
 ## Photographies validées
 

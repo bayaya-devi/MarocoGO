@@ -1,7 +1,10 @@
+import { Component, lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Minus, Plus, RotateCcw, RotateCw, RotateCcw as RotateLeft } from 'lucide-react';
-import { useMemo, useRef, useState } from 'react';
 import type { Country } from '../countries/registry';
 import type { VoyageGoLocale } from '../design-system/contracts';
+import type { Globe3DHandle } from './WorldGlobeScene';
+
+const WorldGlobeScene = lazy(() => import('./WorldGlobeScene').then((module) => ({ default: module.WorldGlobeScene })));
 
 type GlobeLabels = {
   globe: string;
@@ -10,11 +13,80 @@ type GlobeLabels = {
   zoomIn: string;
   zoomOut: string;
   reset: string;
+  loading: string;
+  unavailable: string;
+  fallback: string;
+  retry: string;
 };
+
+type RendererStatus = 'checking' | 'loading' | 'ready' | 'unavailable';
+
+function canCreateWebGLContext(): boolean {
+  try {
+    const canvas = document.createElement('canvas');
+    const options: WebGLContextAttributes = { failIfMajorPerformanceCaveat: true };
+    const context = canvas.getContext('webgl2', options) || canvas.getContext('webgl', options);
+    if (!context) return false;
+    context.getExtension('WEBGL_lose_context')?.loseContext();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function useReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return undefined;
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+  return reduced;
+}
+
+function isLowPowerDevice(): boolean {
+  const deviceNavigator = navigator as Navigator & { deviceMemory?: number };
+  return window.innerWidth < 600
+    || (deviceNavigator.deviceMemory !== undefined && deviceNavigator.deviceMemory <= 4)
+    || (navigator.hardwareConcurrency !== undefined && navigator.hardwareConcurrency <= 4);
+}
+
+class GlobeErrorBoundary extends Component<{
+  children: ReactNode;
+  onError: () => void;
+}, { failed: boolean }> {
+  state = { failed: false };
+
+  static getDerivedStateFromError(): { failed: boolean } {
+    return { failed: true };
+  }
+
+  componentDidCatch(): void {
+    this.props.onError();
+  }
+
+  render(): ReactNode {
+    return this.state.failed ? null : this.props.children;
+  }
+}
+
+function GlobeFallback({ labels, onRetry }: { labels: GlobeLabels; onRetry: () => void }): React.JSX.Element {
+  return (
+    <div className="globe-fallback" role="status">
+      <div className="globe-fallback-orbit" aria-hidden="true"><span /></div>
+      <strong>{labels.unavailable}</strong>
+      <a href="#country-index-title">{labels.fallback}</a>
+      <button type="button" onClick={onRetry}>{labels.retry}</button>
+    </div>
+  );
+}
 
 export function WorldGlobe({
   countries,
-  locale,
+  locale: _locale,
   selectedCode,
   onSelect,
   labels,
@@ -25,80 +97,93 @@ export function WorldGlobe({
   onSelect: (country: Country) => void;
   labels: GlobeLabels;
 }): React.JSX.Element {
-  const [rotation, setRotation] = useState(-12);
-  const [zoom, setZoom] = useState(1);
-  const drag = useRef<{ x: number; rotation: number } | null>(null);
+  const scene = useRef<Globe3DHandle>(null);
+  const drag = useRef<{ x: number; y: number; moved: boolean } | undefined>(undefined);
+  const [status, setStatus] = useState<RendererStatus>('checking');
+  const [zoom, setZoom] = useState(.35);
+  const [rendererKey, setRendererKey] = useState(0);
+  const [lowPower, setLowPower] = useState(false);
+  const reducedMotion = useReducedMotion();
+  const selectedCountry = countries.find((country) => country.code === selectedCode);
 
-  const projected = useMemo(() => countries.map((country) => {
-    const [latitude, longitude] = country.coordinates;
-    const lambda = (longitude - rotation) * Math.PI / 180;
-    const phi = latitude * Math.PI / 180;
-    const center = 18 * Math.PI / 180;
-    const x = Math.cos(phi) * Math.sin(lambda);
-    const y = Math.cos(center) * Math.sin(phi) - Math.sin(center) * Math.cos(phi) * Math.cos(lambda);
-    const z = Math.sin(center) * Math.sin(phi) + Math.cos(center) * Math.cos(phi) * Math.cos(lambda);
-    return { country, x: 50 + x * 42 * zoom, y: 50 - y * 42 * zoom, visible: z > .05 };
-  }), [countries, rotation, zoom]);
+  const detectSupport = useCallback(() => {
+    setStatus('checking');
+    window.setTimeout(() => {
+      const supported = canCreateWebGLContext();
+      setLowPower(isLowPowerDevice());
+      setStatus(supported ? 'loading' : 'unavailable');
+    }, 0);
+  }, []);
 
-  const rotate = (delta: number) => setRotation((value) => value + delta);
-  const changeZoom = (delta: number) => setZoom((value) => Math.min(1.28, Math.max(.82, value + delta)));
+  useEffect(detectSupport, [detectSupport]);
+
+  const retry = () => {
+    setRendererKey((value) => value + 1);
+    detectSupport();
+  };
+  const changeZoom = (delta: number) => setZoom((value) => Math.min(1, Math.max(0, value + delta)));
+  const ready = status === 'ready';
 
   return (
-    <section className="world-globe" aria-label={labels.globe}>
+    <section className="world-globe" aria-label={labels.globe} data-renderer={status}>
       <div
-        className="globe-stage"
-        onPointerDown={(event) => {
-          drag.current = { x: event.clientX, rotation };
+        className="globe-canvas-shell"
+        onPointerDownCapture={(event) => {
+          if (!ready) return;
+          drag.current = { x: event.clientX, y: event.clientY, moved: false };
           event.currentTarget.setPointerCapture(event.pointerId);
         }}
-        onPointerMove={(event) => {
-          if (drag.current) setRotation(drag.current.rotation + (event.clientX - drag.current.x) * .35);
+        onPointerMoveCapture={(event) => {
+          if (!drag.current || !ready) return;
+          const deltaX = event.clientX - drag.current.x;
+          const deltaY = event.clientY - drag.current.y;
+          if (Math.abs(deltaX) + Math.abs(deltaY) > 2) drag.current.moved = true;
+          scene.current?.dragBy(deltaX, deltaY);
+          drag.current.x = event.clientX;
+          drag.current.y = event.clientY;
         }}
-        onPointerUp={() => { drag.current = null; }}
+        onPointerUpCapture={(event) => {
+          if (!drag.current || !ready) return;
+          if (!drag.current.moved) {
+            const bounds = event.currentTarget.getBoundingClientRect();
+            scene.current?.selectAt((event.clientX - bounds.left) / bounds.width, (event.clientY - bounds.top) / bounds.height);
+          }
+          drag.current = undefined;
+          event.currentTarget.releasePointerCapture(event.pointerId);
+        }}
+        onPointerCancelCapture={() => { drag.current = undefined; }}
+        onWheel={(event) => {
+          if (!ready) return;
+          event.preventDefault();
+          changeZoom(event.deltaY > 0 ? -.08 : .08);
+        }}
       >
-        <svg className="globe-sphere" viewBox="0 0 600 600" aria-hidden="true">
-          <defs>
-            <radialGradient id="ocean" cx="34%" cy="28%">
-              <stop offset="0" stopColor="#a8d8dc" stopOpacity=".78" />
-              <stop offset=".55" stopColor="#276979" stopOpacity=".9" />
-              <stop offset="1" stopColor="#081b24" />
-            </radialGradient>
-            <clipPath id="sphere-clip"><circle cx="300" cy="300" r="244" /></clipPath>
-          </defs>
-          <circle cx="300" cy="300" r="252" className="globe-halo" />
-          <circle cx="300" cy="300" r="244" fill="url(#ocean)" className="globe-ocean" />
-          <g clipPath="url(#sphere-clip)" className="globe-grid" style={{ transform: `rotate(${rotation * .08}deg)`, transformOrigin: '300px 300px' }}>
-            <ellipse cx="300" cy="300" rx="244" ry="82" />
-            <ellipse cx="300" cy="300" rx="244" ry="155" />
-            <ellipse cx="300" cy="300" rx="82" ry="244" />
-            <ellipse cx="300" cy="300" rx="155" ry="244" />
-            <path d="M85 340 C180 160 420 160 515 340 C420 455 180 455 85 340Z" className="globe-land" />
-            <path d="M225 120 C285 180 320 245 292 330 C255 420 185 435 155 335 C140 250 170 165 225 120Z" className="globe-land secondary" />
-            <path d="M390 355 C455 350 505 395 470 450 C420 482 362 442 390 355Z" className="globe-land secondary" />
-          </g>
-        </svg>
-        {projected.filter((item) => item.visible).map(({ country, x, y }) => (
-          <button
-            key={country.code}
-            type="button"
-            className="globe-country"
-            data-selected={selectedCode === country.code}
-            data-status={country.status}
-            style={{ insetInlineStart: `${x}%`, insetBlockStart: `${y}%` }}
-            onClick={() => onSelect(country)}
-            aria-pressed={selectedCode === country.code}
-          >
-            <span>{country.code}</span>
-            <strong>{country.name[locale]}</strong>
-          </button>
-        ))}
+        {(status === 'checking' || status === 'loading') && <div className="globe-loading" role="status"><span aria-hidden="true" />{labels.loading}</div>}
+        {status === 'unavailable' && <GlobeFallback labels={labels} onRetry={retry} />}
+        {(status === 'loading' || status === 'ready') && (
+          <GlobeErrorBoundary key={rendererKey} onError={() => setStatus('unavailable')}>
+            <Suspense fallback={null}>
+              <WorldGlobeScene
+                ref={scene}
+                countries={countries}
+                selectedCountry={selectedCountry}
+                zoom={zoom}
+                reducedMotion={reducedMotion}
+                lowPower={lowPower}
+                onSelect={onSelect}
+                onReady={() => setStatus('ready')}
+                onContextLost={() => setStatus('unavailable')}
+              />
+            </Suspense>
+          </GlobeErrorBoundary>
+        )}
       </div>
       <div className="globe-controls" aria-label={labels.globe}>
-        <button type="button" onClick={() => rotate(-18)} aria-label={labels.rotateLeft} title={labels.rotateLeft}><RotateLeft aria-hidden="true" /></button>
-        <button type="button" onClick={() => rotate(18)} aria-label={labels.rotateRight} title={labels.rotateRight}><RotateCw aria-hidden="true" /></button>
-        <button type="button" onClick={() => changeZoom(.1)} aria-label={labels.zoomIn} title={labels.zoomIn}><Plus aria-hidden="true" /></button>
-        <button type="button" onClick={() => changeZoom(-.1)} aria-label={labels.zoomOut} title={labels.zoomOut}><Minus aria-hidden="true" /></button>
-        <button type="button" onClick={() => { setRotation(-12); setZoom(1); }} aria-label={labels.reset} title={labels.reset}><RotateCcw aria-hidden="true" /></button>
+        <button type="button" disabled={!ready} onClick={() => scene.current?.rotate(-.28)} aria-label={labels.rotateLeft} title={labels.rotateLeft}><RotateLeft aria-hidden="true" /></button>
+        <button type="button" disabled={!ready} onClick={() => scene.current?.rotate(.28)} aria-label={labels.rotateRight} title={labels.rotateRight}><RotateCw aria-hidden="true" /></button>
+        <button type="button" disabled={!ready || zoom >= 1} onClick={() => changeZoom(.12)} aria-label={labels.zoomIn} title={labels.zoomIn}><Plus aria-hidden="true" /></button>
+        <button type="button" disabled={!ready || zoom <= 0} onClick={() => changeZoom(-.12)} aria-label={labels.zoomOut} title={labels.zoomOut}><Minus aria-hidden="true" /></button>
+        <button type="button" disabled={!ready} onClick={() => { setZoom(.35); scene.current?.reset(); }} aria-label={labels.reset} title={labels.reset}><RotateCcw aria-hidden="true" /></button>
       </div>
     </section>
   );

@@ -20,6 +20,7 @@ export type CountryStatus = 'published' | 'preview';
 
 export type Country = {
   code: string;
+  isoNumeric: string;
   slug: string;
   name: LocalizedText;
   coordinates: readonly [latitude: number, longitude: number];
@@ -86,18 +87,18 @@ export const media = {
 const names = (fr: string, en: string, ar: string): LocalizedText => ({ fr, en, ar });
 
 export const countries: readonly Country[] = [
-  { code: 'MA', slug: 'ma', name: names('Maroc', 'Morocco', 'المغرب'), coordinates: [31.8, -7.1], status: 'published', route: '/ma', landscape: media.merzouga },
-  { code: 'FR', slug: 'fr', name: names('France', 'France', 'فرنسا'), coordinates: [46.2, 2.2], status: 'preview' },
-  { code: 'JP', slug: 'jp', name: names('Japon', 'Japan', 'اليابان'), coordinates: [36.2, 138.3], status: 'preview' },
-  { code: 'BR', slug: 'br', name: names('Brésil', 'Brazil', 'البرازيل'), coordinates: [-14.2, -51.9], status: 'preview' },
-  { code: 'CA', slug: 'ca', name: names('Canada', 'Canada', 'كندا'), coordinates: [56.1, -106.3], status: 'preview' },
-  { code: 'MX', slug: 'mx', name: names('Mexique', 'Mexico', 'المكسيك'), coordinates: [23.6, -102.5], status: 'preview' },
-  { code: 'NO', slug: 'no', name: names('Norvège', 'Norway', 'النرويج'), coordinates: [60.5, 8.5], status: 'preview' },
-  { code: 'EG', slug: 'eg', name: names('Égypte', 'Egypt', 'مصر'), coordinates: [26.8, 30.8], status: 'preview' },
-  { code: 'IN', slug: 'in', name: names('Inde', 'India', 'الهند'), coordinates: [20.6, 79], status: 'preview' },
-  { code: 'ID', slug: 'id', name: names('Indonésie', 'Indonesia', 'إندونيسيا'), coordinates: [-0.8, 113.9], status: 'preview' },
-  { code: 'AU', slug: 'au', name: names('Australie', 'Australia', 'أستراليا'), coordinates: [-25.3, 133.8], status: 'preview' },
-  { code: 'NZ', slug: 'nz', name: names('Nouvelle-Zélande', 'New Zealand', 'نيوزيلندا'), coordinates: [-40.9, 174.9], status: 'preview' },
+  { code: 'MA', isoNumeric: '504', slug: 'ma', name: names('Maroc', 'Morocco', 'المغرب'), coordinates: [31.8, -7.1], status: 'published', route: '/ma', landscape: media.merzouga },
+  { code: 'FR', isoNumeric: '250', slug: 'fr', name: names('France', 'France', 'فرنسا'), coordinates: [46.2, 2.2], status: 'preview' },
+  { code: 'JP', isoNumeric: '392', slug: 'jp', name: names('Japon', 'Japan', 'اليابان'), coordinates: [36.2, 138.3], status: 'preview' },
+  { code: 'BR', isoNumeric: '076', slug: 'br', name: names('Brésil', 'Brazil', 'البرازيل'), coordinates: [-14.2, -51.9], status: 'preview' },
+  { code: 'CA', isoNumeric: '124', slug: 'ca', name: names('Canada', 'Canada', 'كندا'), coordinates: [56.1, -106.3], status: 'preview' },
+  { code: 'MX', isoNumeric: '484', slug: 'mx', name: names('Mexique', 'Mexico', 'المكسيك'), coordinates: [23.6, -102.5], status: 'preview' },
+  { code: 'NO', isoNumeric: '578', slug: 'no', name: names('Norvège', 'Norway', 'النرويج'), coordinates: [60.5, 8.5], status: 'preview' },
+  { code: 'EG', isoNumeric: '818', slug: 'eg', name: names('Égypte', 'Egypt', 'مصر'), coordinates: [26.8, 30.8], status: 'preview' },
+  { code: 'IN', isoNumeric: '356', slug: 'in', name: names('Inde', 'India', 'الهند'), coordinates: [20.6, 79], status: 'preview' },
+  { code: 'ID', isoNumeric: '360', slug: 'id', name: names('Indonésie', 'Indonesia', 'إندونيسيا'), coordinates: [-0.8, 113.9], status: 'preview' },
+  { code: 'AU', isoNumeric: '036', slug: 'au', name: names('Australie', 'Australia', 'أستراليا'), coordinates: [-25.3, 133.8], status: 'preview' },
+  { code: 'NZ', isoNumeric: '554', slug: 'nz', name: names('Nouvelle-Zélande', 'New Zealand', 'نيوزيلندا'), coordinates: [-43.5, 170.5], status: 'preview' },
 ] as const;
 
 export function getCountry(code: string): Country | undefined {
