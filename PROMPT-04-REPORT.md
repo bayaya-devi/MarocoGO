@@ -1,7 +1,7 @@
 # VoyageGo — rapport d’implémentation du Prompt 04
 
 **Date :** 17 octobre 2026  
-**État :** implémentation et validation locales terminées ; publication en attente du workflow GitHub Pages
+**État :** implémentation, validation et publication terminées
 
 ## Technologie
 
@@ -36,4 +36,9 @@ La texture provient de NASA/Goddard Space Flight Center SVS. Les frontières pro
 
 ## Déploiement
 
-Le déploiement n’est déclaré réussi qu’après validation du workflow GitHub Pages et ouverture effective de la page publique et d’un lien direct.
+- Commit fonctionnel : `de32cbf` (`feat: add immersive interactive 3D globe`).
+- Workflow GitHub Pages : [exécution 39073412467](https://github.com/bayaya-devi/MarocoGO/actions/runs/39073412467), build et déploiement réussis.
+- URL publique : <https://bayaya-devi.github.io/MarocoGO/>.
+- Vérification publique : canvas WebGL prêt, texture terrestre servie en HTTP 200 (48 560 octets), aucune erreur de page et accès direct à `/MarocoGO/ma/planifier` réussi.
+
+Les avertissements du workflow concernent la migration future des actions GitHub de Node.js 20 vers Node.js 24 et d’`ubuntu-latest` vers Ubuntu 26 ; ils n’ont affecté ni le build ni le déploiement.
