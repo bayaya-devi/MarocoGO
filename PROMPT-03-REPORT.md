@@ -59,7 +59,9 @@ Les comptes, réservations, paiements, prix, disponibilités, synchronisation mu
 
 ## Déploiement
 
-L’état de publication est renseigné à la fin de l’intervention, après vérification de l’accès GitHub, de la divergence de la branche, du workflow réel et du site publié. Aucun succès de déploiement ne doit être inféré de la seule réussite locale.
+Le commit principal `4a8a7c4` a été poussé sans force sur `main`. Le workflow GitHub Pages `39071240660` a réussi ses étapes de build et de déploiement. Le site public et le lien direct `/ma/planifier` ont ensuite été ouverts et vérifiés sur `https://bayaya-devi.github.io/MarocoGO/`.
+
+Le workflow signale deux avertissements non bloquants à anticiper : migration prochaine de `ubuntu-latest` vers Ubuntu 26 et exécution forcée sous Node.js 24 d’actions déclarant encore Node.js 20.
 
 ## Recommandations suivantes
 
@@ -67,3 +69,4 @@ L’état de publication est renseigné à la fin de l’intervention, après v�
 2. Brancher un service de comptes seulement avec contrats d’API, autorisations et états d’erreur explicites.
 3. Ajouter les prochains pays par le registre commun, après audit géographique, éditorial et média.
 4. Mettre en place un contrôle visuel de référence pour les scènes à 320, 768, 1 024 et 1 440 px.
+5. Mettre à jour les actions GitHub lorsqu’une version déclarant officiellement Node.js 24 est disponible.
